@@ -2,11 +2,11 @@
 
 import {z} from "zod";
 
-export async function signupMethod(formData: FormData) {
+export async function loginMethod(formData: FormData) {
 
     const User = z.object({
-        login: z.string().trim().min(3, {message: 'Login must contain at least 3 character'}),
-        password: z.string().trim().min(3, {message: 'Password must contain at least 3 character'}),
+        login: z.string().trim(),
+        password: z.string().trim(),
     })
 
     type User = z.infer<typeof User>
@@ -34,7 +34,7 @@ export async function signupMethod(formData: FormData) {
 
     const _body = JSON.stringify(userDataParse.data)
 
-    await fetch('http://localhost:3000/api/signup', {
+    return await fetch('http://localhost:3000/api/login', {
         method: 'POST',
         body: _body,
     })
@@ -42,10 +42,12 @@ export async function signupMethod(formData: FormData) {
             switch (res.status) {
                 case 200:
                     // console.log(res)
-                    break
+                    return res.json()
+                case 403:
+                    throw new Error('Something in data login method went wrong') //достать ошибку из json и подставить
                 case 500:
                     // console.log(res)
-                    throw new Error('Something in signup method went wrong')
+                    throw new Error('Something in login method went wrong')
             }
         })
         .catch((err) => {

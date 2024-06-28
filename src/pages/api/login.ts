@@ -1,20 +1,34 @@
+'use server'
+
 import type { NextApiRequest, NextApiResponse } from "next"
 import jsonwebtoken from "jsonwebtoken"
 import pool from "@/lib/db/db";
 
-type ResponseData = {
-    msg: string
+export type ResponseLoginData = {
+    msg: string,
+    token?: string,
+    id?: string,
+    login?: string,
 }
 
 const jwt = jsonwebtoken
 
-export default function loginHandler(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
+export default async function loginHandler(req: NextApiRequest, res: NextApiResponse<ResponseLoginData>) {
 
-    req.method !== "GET" && res.status(400).json({msg: 'error'})
+    req.method !== "POST" && res.status(400).json({msg: 'error request'})
 
-    const bodyData: ResponseData = {
-        msg: jwt.sign({ foo: 'bar', iat: Math.floor(Date.now() / 1000) - 30 }, 'shhhhh')
-    }
+    const data = JSON.parse(req.body)
 
-    res.status(200).json(bodyData)
+    await pool.query(`SELECT id, login FROM users WHERE login='${data.login}' AND password='${data.password}'`)
+        .then((result) => {
+            if(result.rows.length == 0){
+                res.status(403).json({ msg: 'Incorrect user data.' })
+                // throw new Error('Incorrect user data.');
+            }
+            const token = jwt.sign({id: result.rows[0].id, login: result.rows[0].login}, `${process.env.JWT_SECRET}`, {expiresIn: '15m'})
+            res.status(200).json({ msg: 'Successfully logged in!', token: token, id: result.rows[0].id, login: result.rows[0].login })
+        })
+        .catch((err) => {
+            res.status(403).json({ msg: err.toString() })
+        })
 }

@@ -1,6 +1,8 @@
 'use server'
 
 import {signupMethod} from "@/lib/actions/signupMethod";
+import {redirect} from "next/navigation";
+import {revalidatePath} from "next/cache";
 
 export async function signupAction(_currentState: unknown, formData: FormData) {
     try {
@@ -11,4 +13,7 @@ export async function signupAction(_currentState: unknown, formData: FormData) {
         }
         throw error
     }
+
+    revalidatePath('/signup')
+    redirect('/login')
 }
