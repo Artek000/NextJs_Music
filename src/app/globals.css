@@ -1,3 +1,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.slider {
+    outline: none;
+    overflow: hidden;
+}
+
+.slider::-webkit-slider-thumb {
+    appearance: none;
+    background: #e3116f;
+    box-shadow: -200px 0 0 200px #379683;
+    border: 0;
+    width: 0;
+    height: 0;
+    border-radius: 50px;
+}
+
+.slider::-moz-range-thumb {
+    appearance: none;
+    background: #e3116f;
+    box-shadow: -200px 0 0 200px #379683;
+    border: 0;
+    width: 0;
+    height: 0;
+    border-radius: 50px;
+}
+
+.slider::-ms-thumb {
+    appearance: none;
+    background: #e3116f;
+    box-shadow: -200px 0 0 200px #379683;
+    border: 0;
+    width: 0;
+    height: 0;
+    border-radius: 50px;
+}
