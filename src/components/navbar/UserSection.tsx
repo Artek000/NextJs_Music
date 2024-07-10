@@ -9,9 +9,10 @@ import Image from 'next/image'
 import { Fragment } from 'react'
 import Link from 'next/link'
 import { useAppSelector } from '@/lib/hooks'
+import { selectLogin } from '@/lib/userSlice'
 
 export default function UserSection() {
-	const login = useAppSelector(state => state.user.login)
+	const login = useAppSelector(state => selectLogin(state))
 	const userNavigation = [
 		{ name: 'Your Profile', href: '#' },
 		{ name: 'Settings', href: '#' },

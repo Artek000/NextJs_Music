@@ -3,13 +3,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import jsonwebtoken from 'jsonwebtoken'
 import pool from '@/lib/db/db'
-
-export type ResponseLoginData = {
-	msg: string
-	token?: string
-	id?: string
-	login?: string
-}
+import { ResponseLoginData } from '@/lib/types'
 
 const jwt = jsonwebtoken
 

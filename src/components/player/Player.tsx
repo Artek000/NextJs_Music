@@ -6,25 +6,43 @@ import {
 	BackwardIcon,
 	ForwardIcon
 } from '@heroicons/react/24/solid'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useAppSelector } from '@/lib/hooks'
+import { selectTrack } from '@/lib/trackSlice'
 
 export default function Player() {
 	const audioRef = useRef<HTMLAudioElement>(null)
 	const progressRef = useRef<HTMLInputElement>(null)
+	const bufferRef = useRef<HTMLInputElement>(null)
 	const [isPlaying, setIsPlaying] = useState<boolean>(false)
 	const [currentTime, setCurrentTime] = useState<string>('00:00')
 	const [duration, setDuration] = useState<string>('00:00')
+	const currTrack = useAppSelector(state => selectTrack(state))
 
 	const togglePlayPause = () => {
 		if (audioRef.current) {
-			setIsPlaying(prev => !prev)
 			if (isPlaying) {
 				audioRef.current.pause()
+				setIsPlaying(prev => !prev)
 			} else {
-				audioRef.current.play()
+				audioRef.current.play().then(() => {
+					setIsPlaying(prev => !prev)
+				})
 			}
 		}
 	}
+
+	useEffect(() => {
+		if (audioRef.current && currTrack.id > 0) {
+			audioRef.current.pause()
+			setIsPlaying(false)
+			audioRef.current.load()
+			audioRef.current.play().then(() => {
+				setIsPlaying(true)
+			})
+			// console.log('effect')
+		}
+	}, [currTrack.id])
 
 	const onLoadedMetadata = () => {
 		if (audioRef.current && progressRef.current) {
@@ -47,6 +65,13 @@ export default function Player() {
 		if (audioRef.current && progressRef.current) {
 			setCurrentTime(formatTime(audioRef.current.currentTime))
 			progressRef.current.value = String(audioRef.current.currentTime)
+			if (audioRef.current.buffered.length > 0 && bufferRef.current) {
+				bufferRef.current.style.width =
+					(audioRef.current.buffered.end(0) /
+						audioRef.current.duration) *
+						100 +
+					'%'
+			}
 		}
 	}
 
@@ -65,6 +90,17 @@ export default function Player() {
 		<div className='absolute bottom-0 left-0 right-0 mx-auto w-full h-16 bg-secondary lg:rounded-t-lg lg:max-w-7xl'>
 			<div className='flex items-center justify-center h-full'>
 				<div className='mx-auto h-full flex flex-row justify-center items-center'>
+					{currTrack.id !== 0 && (
+						<div className='mr-2 p-2 select-none text-main-white text-xl'>
+							<span className='tracking-widest tabular-nums'>
+								{currTrack.artist_name}
+							</span>
+							<span>&nbsp;-&nbsp;</span>
+							<span className='tracking-widest tabular-nums'>
+								{currTrack.track_name}
+							</span>
+						</div>
+					)}
 					<button className='w-9 h-9 bg-main-dark rounded-full flex justify-center items-center'>
 						<BackwardIcon className='w-6 h-6 fill-main-white' />
 					</button>
@@ -96,7 +132,10 @@ export default function Player() {
 					</div>
 					<div className='relative h-3 w-40 rounded-lg ml-2 bg-main-white'>
 						{/* download bar*/}
-						{/*<div className='absolute h-full w-5/12 rounded-lg bg-main-light'></div>*/}
+						<div
+							ref={bufferRef}
+							className='absolute h-full rounded-lg bg-main-light'
+						></div>
 						{/* timeline bar*/}
 						<input
 							type='range'
@@ -112,8 +151,12 @@ export default function Player() {
 				ref={audioRef}
 				onTimeUpdate={onTimeUpdate}
 				onLoadedMetadata={onLoadedMetadata}
+				preload='auto'
 			>
-				<source type='audio/mpeg' src='/api/get_track' />
+				<source
+					type='audio/mpeg'
+					src={`/api/get_track/${currTrack.id}`}
+				/>
 			</audio>
 		</div>
 	)

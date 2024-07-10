@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
-import userReducer from '@/lib/userSlice'
+import { userSlice } from '@/lib/userSlice'
+import { trackSlice } from '@/lib/trackSlice'
 
 export const makeStore = () => {
 	return configureStore({
 		reducer: {
-			user: userReducer
+			[userSlice.name]: userSlice.reducer,
+			[trackSlice.name]: trackSlice.reducer
 		}
 	})
 }

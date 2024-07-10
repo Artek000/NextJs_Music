@@ -2,14 +2,11 @@
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import pool from '@/lib/db/db'
-
-type ResponseData = {
-	msg: string
-}
+import { ResponseSignUpData, ResponseSignUpDataError } from '@/lib/types'
 
 export default async function handler(
 	req: NextApiRequest,
-	res: NextApiResponse<ResponseData>
+	res: NextApiResponse<ResponseSignUpData | ResponseSignUpDataError>
 ) {
 	req.method !== 'POST' && res.status(400).json({ msg: 'error' })
 

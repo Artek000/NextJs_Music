@@ -1,6 +1,5 @@
-'use client'
-import TracksGrid from '@/components/tracksGrid/TracksGrid'
+import Tracks from '@/components/tracksGrid/Tracks'
 
 export default function Home() {
-	return <TracksGrid />
+	return <Tracks />
 }
