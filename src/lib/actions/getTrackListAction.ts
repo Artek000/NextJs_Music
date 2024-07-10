@@ -6,9 +6,12 @@ export async function getTrackListAction(): Promise<ResponseTracksList[]> {
 	// if (!res.ok) {
 	// 	throw new Error('Failed to fetch tracks')
 	// }
-	return await fetch('http://localhost:3000/api/get_tracklist', {
-		cache: 'no-cache'
-	})
+	return await fetch(
+		process.env.NEXT_PUBLIC_SERVER_API_URL + '/api/get_tracklist',
+		{
+			cache: 'no-cache'
+		}
+	)
 		.then(res => res.json())
 		.then(data => {
 			return data
