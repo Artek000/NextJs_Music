@@ -33,6 +33,7 @@ export async function loginMethod(formData: FormData) {
 	const _body = JSON.stringify(userDataParse.data)
 
 	return await fetch('http://localhost:3000/api/login', {
+		cache: 'no-cache',
 		method: 'POST',
 		body: _body
 	})

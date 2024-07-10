@@ -39,6 +39,7 @@ export async function signupMethod(formData: FormData) {
 	const _body = JSON.stringify(userDataParse.data)
 
 	await fetch('http://localhost:3000/api/signup', {
+		cache: 'no-cache',
 		method: 'POST',
 		body: _body
 	})

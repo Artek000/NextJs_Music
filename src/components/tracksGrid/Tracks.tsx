@@ -1,5 +1,3 @@
-'use server'
-
 import { getTrackListAction } from '@/lib/actions/getTrackListAction'
 import TracksGrid from '@/components/tracksGrid/TracksGrid'
 
