@@ -9,6 +9,7 @@ export async function getTrackListAction(): Promise<ResponseTracksList[]> {
 	return await fetch(
 		process.env.NEXT_PUBLIC_SERVER_API_URL + '/api/get_tracklist',
 		{
+			method: 'GET',
 			cache: 'no-cache'
 		}
 	)
@@ -16,4 +17,5 @@ export async function getTrackListAction(): Promise<ResponseTracksList[]> {
 		.then(data => {
 			return data
 		})
+		.catch(err => console.log(err))
 }
