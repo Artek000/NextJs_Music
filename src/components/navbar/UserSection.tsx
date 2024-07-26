@@ -24,7 +24,7 @@ export default function UserSection() {
 			<MenuButton className='relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm ring-2 ring-gray-600 ring-offset-2 ring-offset-gray-800 focus:outline-none'>
 				<span className='absolute -inset-1.5' />
 				<span className='sr-only'>Open user menu</span>
-				{login && <p className='text-gray-300 m-1'>login</p>}
+				{login && <p className='text-gray-300 m-1'>{login}</p>}
 				<Image
 					className='h-8 w-8 rounded-full'
 					width={32}
