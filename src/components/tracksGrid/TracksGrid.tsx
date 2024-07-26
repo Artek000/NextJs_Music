@@ -1,3 +1,5 @@
+'use client'
+
 import MusicCard from '@/UI/cards/MusicCard'
 import { ResponseTracksList } from '@/lib/types'
 

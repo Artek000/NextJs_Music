@@ -12,10 +12,5 @@ export async function getTrackListAction(): Promise<ResponseTracksList[]> {
 			method: 'GET',
 			cache: 'no-cache'
 		}
-	)
-		.then(res => res.json())
-		.then(data => {
-			return data
-		})
-		.catch(err => console.log(err))
+	).then(res => res.json())
 }
